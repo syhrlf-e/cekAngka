@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OCR Angka Terakhir</title>
+    <title>OCR Angka</title>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js"></script>
     <style>
       #imagePreview img {
@@ -15,7 +15,7 @@
     </style>
   </head>
   <body>
-    <h1>Scan Kertas</h1>
+    <h1>Scan Kertas untuk Angka</h1>
     <input type="file" accept="image/*" id="fileInput" />
     <div id="result"></div>
     <div id="imagePreview"></div>
@@ -45,10 +45,7 @@
           } = await Tesseract.recognize(image, "eng", {
             tessedit_char_whitelist: "0123456789",
           });
-
-          // Ambil hanya angka terakhir dari teks yang terdeteksi
-          const lastNumber = text.trim().match(/\d+(\.\d+)?$/);
-          resultDiv.textContent = `Angka terakhir yang terdeteksi: ${lastNumber}`;
+          resultDiv.textContent = `Angka yang terdeteksi: ${text.trim()}`;
         };
       });
     </script>
