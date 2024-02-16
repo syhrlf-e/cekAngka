@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OCR Angka Terakhir</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js"></script>
+    <style>
+      #imagePreview img {
+        max-width: 1000px;
+        max-height: 1000px;
+        width: auto;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Scan Kertas</h1>
+    <input type="file" accept="image/*" id="fileInput" />
+    <div id="result"></div>
+    <div id="imagePreview"></div>
+
+    <script>
+      const fileInput = document.getElementById("fileInput");
+      const resultDiv = document.getElementById("result");
+      const imagePreview = document.getElementById("imagePreview");
+
+      fileInput.addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const image = new Image();
+          image.src = e.target.result;
+          imagePreview.innerHTML = ""; // Clear previous image preview
+          imagePreview.appendChild(image);
+        };
+
+        reader.readAsDataURL(file);
+
+        reader.onloadend = async function () {
+          const image = document.querySelector("img");
+          const {
+            data: { text },
+          } = await Tesseract.recognize(image, "eng", {
+            tessedit_char_whitelist: "0123456789",
+          });
+
+          // Ambil hanya angka terakhir dari teks yang terdeteksi
+          const lastNumber = text.trim().match(/\d+(\.\d+)?$/);
+          resultDiv.textContent = `Angka terakhir yang terdeteksi: ${lastNumber}`;
+        };
+      });
+    </script>
+  </body>
+</html>
